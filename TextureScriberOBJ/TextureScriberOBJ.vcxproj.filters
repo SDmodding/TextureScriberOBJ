@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Project Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Project Files\Dependencies">
+      <UniqueIdentifier>{f9abb6f3-87fb-4867-b5f9-3e142d72931c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Files\Dependencies\MinHook">
+      <UniqueIdentifier>{e4474b1a-efda-4e62-bee1-f2289c290431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Files\Dependencies\MinHook\hde">
+      <UniqueIdentifier>{0b56f70b-a2df-45f1-a2fe-59b4d8af0f89}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cc">
+      <Filter>Project Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\fast_obj.c">
+      <Filter>Project Files\Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\MinHook\hde\hde64.c">
+      <Filter>Project Files\Dependencies\MinHook\hde</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\MinHook\buffer.c">
+      <Filter>Project Files\Dependencies\MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\MinHook\hook.c">
+      <Filter>Project Files\Dependencies\MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\MinHook\trampoline.c">
+      <Filter>Project Files\Dependencies\MinHook</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="UFG.hh">
+      <Filter>Project Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\fast_obj.h">
+      <Filter>Project Files\Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\MinHook\hde\hde64.h">
+      <Filter>Project Files\Dependencies\MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\MinHook\hde\pstdint.h">
+      <Filter>Project Files\Dependencies\MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\MinHook\hde\table64.h">
+      <Filter>Project Files\Dependencies\MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\MinHook\buffer.h">
+      <Filter>Project Files\Dependencies\MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\MinHook\MinHook.h">
+      <Filter>Project Files\Dependencies\MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\MinHook\trampoline.h">
+      <Filter>Project Files\Dependencies\MinHook</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
