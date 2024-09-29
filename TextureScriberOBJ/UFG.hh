@@ -1,4 +1,10 @@
 #pragma once
+//=================================================================================
+// 
+//	Description:	This is helper header for calling functions inside
+//					'TextureScriberPC64.exe'.
+// 
+//=================================================================================
 #include <cstdint>
 
 #define UFG_RVA(x)			(UFG::g_BaseAddress + x)
@@ -12,7 +18,6 @@ namespace UFG
 	{
 		return (*reinterpret_cast<uint32_t*>(UFG_RVA(0xF8)) == 0x5578C12E);
 	}
-
 
 	template <typename... Args>
 	void qPrintf(const char* p_Format, Args... p_Args)

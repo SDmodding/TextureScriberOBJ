@@ -79,19 +79,17 @@ public:
 
             auto pTex = &m_pObjMesh->textures[texInfo.m_Idx];
 
-            const char* pTexFile = nullptr;
-            if (UFG::qFileExists(pTex->path)) {
-                pTexFile = pTex->path;
-            }
-            else if (UFG::qFileExists(pTex->name)) {
-                pTexFile = pTex->name;
-            }
-
-            if (!pTexFile) {
+            if (!pTex->path) {
                 continue;
             }
 
-            AddResource(pTexFile, texInfo.m_Suffix);
+            if (!UFG::qFileExists(pTex->path)) 
+            {
+                UFG::qPrintf("WARN: File doesn't exist: '%s'.\n", pTex->name);
+                continue;
+            }
+
+            AddResource(pTex->path, texInfo.m_Suffix);
         }
 
         return true;
@@ -110,8 +108,7 @@ public:
         }
 
         strncpy(m_Name, (pName ? &pName[1] : p_FilePath), sizeof(m_Name));
-        char* pDot = strchr(m_Name, '.');
-        if (pDot) {
+        if (char* pDot = strchr(m_Name, '.')) {
             *pDot = '\0';
         }
 
@@ -128,6 +125,7 @@ namespace Hooks
 {
     namespace SimpleXML::XMLCache
     {
+        // We don't create XML file so we need to pass it from memory.
         char* __fastcall ExtractFromCache(const char* p_Filename)
         {
             if (strcmp(p_Filename, CONFIG_FILE) == 0) {
@@ -195,6 +193,7 @@ int main(int argc, char** argv)
     }
 
     //-------------------------------------------------------------------------------------------
+    // Hooks
 
     Hooks::Initialize();
 
@@ -209,9 +208,12 @@ int main(int argc, char** argv)
 
     bool bSuccess = UFG::qTextureScribe("PC64", CONFIG_FILE, permFile, tempFile, 0, 0, 0);
 
-    //-------------------------------------------------------------------------------------------
+    if (!bSuccess) {
+        return 1;
+    }
 
-    return (!bSuccess);
+    UFG::qPrintf("DONE: Successfully scribed all textures from object material file.\n");
+    return 0;
 }
 
 //=============================================================================================

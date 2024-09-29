@@ -36,16 +36,6 @@ namespace Con
 		return nullptr;
 	}
 
-	int GetArgParamInt(const char* p_Arg)
-	{
-		const char* pParam = GetArgParam(p_Arg);
-		if (!pParam) {
-			return 0;
-		}
-
-		return atoi(pParam);
-	}
-
 	bool IsArgSet(const char* p_Arg)
 	{
 		int argc = GetArgc();
