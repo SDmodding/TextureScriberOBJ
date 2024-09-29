@@ -19,9 +19,6 @@
     <ClCompile Include="dllmain.cc">
       <Filter>Project Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\fast_obj.c">
-      <Filter>Project Files\Dependencies</Filter>
-    </ClCompile>
     <ClCompile Include="Dependencies\MinHook\hde\hde64.c">
       <Filter>Project Files\Dependencies\MinHook\hde</Filter>
     </ClCompile>

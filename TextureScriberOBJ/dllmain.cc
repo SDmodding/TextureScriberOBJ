@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <combaseapi.h>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -17,7 +18,12 @@
 // Headers
 
 #include "Dependencies/MinHook/MinHook.h"
-#include "Dependencies/fast_obj.h"
+
+extern "C" 
+{
+    #define FAST_OBJ_IMPLEMENTATION
+    #include "Dependencies/fast_obj.h"
+}
 
 #include "UFG.hh"
 #include "Console.hh"
