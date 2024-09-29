@@ -1,11 +1,9 @@
 #include <combaseapi.h>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include <shellapi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-#include <vector>
 
 //=============================================================================================
 // Defines
@@ -22,6 +20,7 @@
 #include "Dependencies/fast_obj.h"
 
 #include "UFG.hh"
+#include "Console.hh"
 
 //=============================================================================================
 
@@ -32,13 +31,6 @@ public:
     fastObjMesh* m_pObjMesh = nullptr;
     
     std::string m_XMLCfg;
-
-    void Cleanup()
-    {
-        DeleteFileA(DIFFUSE_FILE);
-        DeleteFileA(SPECULAR_FILE);
-        DeleteFileA(NORMALMAP_FILE);
-    }
 
     void AddResource(const char* p_File, const char* p_Suffix)
     {
@@ -99,13 +91,7 @@ public:
                 continue;
             }
 
-            if (CreateSymbolicLinkA(texInfo.m_Filename, pTexFile, SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE) == 0) 
-            {
-                printf("ERROR: Failed to create symbolic link for '%s'.\n", pTexFile);
-                return false;
-            }
-
-            AddResource(texInfo.m_Filename, texInfo.m_Suffix);
+            AddResource(pTexFile, texInfo.m_Suffix);
         }
 
         return true;
@@ -165,40 +151,65 @@ namespace Hooks
 //=============================================================================================
 // fake main
 
-int main(int argc, wchar_t** argv)
+int main(int argc, char** argv)
 {
-    wchar_t* pObjPath = nullptr;
-    for (int i = 0; argc > i; ++i)
-    {
-        if (wcsstr(argv[i], L".obj")) {
-            pObjPath = argv[i]; break;
-        }
-    }
+    //-------------------------------------------------------------------------------------------
+    // Prepare
 
+    const char* pObjPath = Con::GetArgParam("-obj");
     if (!pObjPath)
     {
-        printf("ERROR: Failed to find object file in arguments.\n");
+        UFG::qPrintf("ERROR: Missing argument for object file: '-obj'.\n");
         return 1;
     }
 
-    char mbObjPath[MAX_PATH] = { '\0' };
-    wcstombs(mbObjPath, pObjPath, sizeof(mbObjPath));
-
-    if (!gObjFile.LoadFile(mbObjPath)) 
+    const char* pOutPath = Con::GetArgParam("-out");
+    if (pOutPath)
     {
-        printf("ERROR: Failed to load object file.\n");
+        // Check if out contains "data", this is necessary for resource uid...
+        if (!UFG::qStringFindLastInsensitive(pOutPath, "data\\") && !UFG::qStringFindLastInsensitive(pOutPath, "data/"))
+        {
+            UFG::qPrintf("ERROR: Output path doesn't contain 'data' folder.\n");
+            return 1;
+        }
+    }
+    else
+    {
+        UFG::qPrintf("ERROR: Missing argument for output file: '-out'.\n");
+        return 1;
+    }
+
+    //-------------------------------------------------------------------------------------------
+    // Handle object file
+
+    if (!gObjFile.LoadFile(pObjPath))
+    {
+        UFG::qPrintf("ERROR: Failed to load object file.\n");
         return 1;
     }
 
     if (!gObjFile.InitializeTextures())
     {
-        printf("ERROR: Failed to initialize textures.\n");
+        UFG::qPrintf("ERROR: Failed to initialize textures.\n");
         return 1;
     }
 
+    //-------------------------------------------------------------------------------------------
+
     Hooks::Initialize();
 
-    bool bSuccess = UFG::qTextureScribe("PC64", CONFIG_FILE, "Data/Test.perm.bin", "Data/Test.temp.bin", 0, 0, 0);
+    //-------------------------------------------------------------------------------------------
+    // Scribe
+
+    char permFile[MAX_PATH];
+    char tempFile[MAX_PATH];
+
+    sprintf_s(permFile, sizeof(permFile), "%s.perm.bin", pOutPath);
+    sprintf_s(tempFile, sizeof(tempFile), "%s.temp.bin", pOutPath);
+
+    bool bSuccess = UFG::qTextureScribe("PC64", CONFIG_FILE, permFile, tempFile, 0, 0, 0);
+
+    //-------------------------------------------------------------------------------------------
 
     return (!bSuccess);
 }
@@ -222,30 +233,13 @@ int __stdcall DllMain(HMODULE p_hModule, DWORD p_dwReason, void* p_Reserved)
             return 0;
         }
 
-        wchar_t* pCmdLine = GetCommandLineW();
-        if (!pCmdLine) 
-        {
-            printf("ERROR: Failed to retrieve command line string.\n");
-            return 0;
-        }
-
-        int argc;
-        wchar_t** argv = CommandLineToArgvW(pCmdLine, &argc);
-        if (!argv)
-        {
-            printf("ERROR: Failed to retrieve command line arguments.\n");
-            return 0;
-        }
-
         UFG::qInit();
-        gObjFile.Cleanup();
 
-        int exitCode = main(argc, argv);
+        int exitCode = main(Con::GetArgc(), Con::GetArgv());
         if (exitCode != 0 && IsDebuggerPresent()) {
             DebugBreak();
         }
 
-        gObjFile.Cleanup();
         exit(exitCode);
     }
 

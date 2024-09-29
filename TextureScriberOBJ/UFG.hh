@@ -45,4 +45,9 @@ namespace UFG
 		return reinterpret_cast<bool(__fastcall*)(const char*, const char*, const char*, const char*, const char*, const char*, const char*)>(UFG_RVA(0x132300))
 			(p_Platform, p_Config, p_PermFile, p_TempFile, p_TextureCache, p_Detail, p_Unknown);
 	}
+
+	char* qStringFindLastInsensitive(const char* p_Text, const char* p_Find)
+	{
+		return reinterpret_cast<char*(__fastcall*)(const char*, const char*)>(UFG_RVA(0x11D6E0))(p_Text, p_Find);
+	}
 }

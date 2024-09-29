@@ -163,6 +163,7 @@
     <ClCompile Include="dllmain.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Console.hh" />
     <ClInclude Include="Dependencies\fast_obj.h" />
     <ClInclude Include="Dependencies\MinHook\buffer.h" />
     <ClInclude Include="Dependencies\MinHook\hde\hde64.h" />

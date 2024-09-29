@@ -60,5 +60,8 @@
     <ClInclude Include="Dependencies\MinHook\trampoline.h">
       <Filter>Project Files\Dependencies\MinHook</Filter>
     </ClInclude>
+    <ClInclude Include="Console.hh">
+      <Filter>Project Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
